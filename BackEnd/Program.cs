@@ -8,18 +8,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-#region DI
-
-builder.Services.AddDbContext<NorthwndContext>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ICategoryDAL, CategoryDAL>();
-
-#endregion
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region DI
+builder.Services.AddDbContext<NorthwndContext>();
+builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryDAL, CategoryDAL>();
+
+#endregion
 
 var app = builder.Build();
 

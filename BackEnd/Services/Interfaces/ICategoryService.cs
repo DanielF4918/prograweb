@@ -1,13 +1,14 @@
-﻿using Entities.Entities;
+﻿using BackEnd.DTO;
+using Entities.Entities;
 
 namespace BackEnd.Services.Interfaces
 {
     public interface ICategoryService
     {
 
-        void AddCategory(Category category);
+        void AddCategory(CategoryDTO category);
         void UpdateCategory(Category category);
         void DeleteCategory(int id);
-        List<Category> GetAllCategories();
+        List<Category> GetCategories();
     }
 }

@@ -1,4 +1,6 @@
-﻿using BackEnd.Services.Interfaces;
+﻿using BackEnd.DTO;
+using BackEnd.Services.Interfaces;
+using DAL.Implementations;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +18,7 @@ namespace BackEnd.Controllers
         {
             _categoryService = categoryService;
         }
+
         // GET: api/<CategoryController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -32,16 +35,18 @@ namespace BackEnd.Controllers
 
         // POST api/<CategoryController>
         [HttpPost]
-        public void Post([FromBody] Category category)
+        public void Post([FromBody] CategoryDTO category)
         {
             _categoryService.AddCategory(category);
 
         }
 
         // PUT api/<CategoryController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public void Put([FromBody] Category category)
         {
+            _categoryService.UpdateCategory(category);
+
         }
 
         // DELETE api/<CategoryController>/5
