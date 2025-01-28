@@ -7,11 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface ICategoryDAL
+    public interface ICategoryDAL : IDALGenerico<Category>
     { 
-        bool AddCategory(Category category);
-        bool UpdateCategory(Category category);
-        bool DeleteCategory(int id);
-        List<Category> GetAllCategories();
     }
 }
