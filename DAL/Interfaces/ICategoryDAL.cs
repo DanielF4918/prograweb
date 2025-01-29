@@ -9,6 +9,8 @@ namespace DAL.Interfaces
 {
     public interface ICategoryDAL : IDALGenerico<Category>
     {
-        void Remove(Category category);
+
+
+
     }
 }
