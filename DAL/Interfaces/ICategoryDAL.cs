@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace DAL.Interfaces
 {
     public interface ICategoryDAL : IDALGenerico<Category>
-    { 
+    {
+        void Remove(Category category);
     }
 }
