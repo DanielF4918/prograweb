@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace DAL.Implementations
 {
-    public class CategoryDAL : DALGenericoImpl<Category>, ICategoryDAL
+    public class CategoryDAL : DALGenericoImpl<Category>,  ICategoryDAL
     {
         private NorthwndContext _context;
 
-        public CategoryDAL(NorthwndContext context) : base(context)
+        public CategoryDAL(NorthwndContext context): base(context)
         {
             _context = context;
         }
-
+ 
 
     }
 }

@@ -5,44 +5,39 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FrontEnd.Controllers
 {
-    public class CategoryController : Controller
+    public class ShipperController : Controller
     {
+        IShipperHelper _shipperHelper;
 
-        ICategoryHelper _categoryHelper;
-
-        public CategoryController(ICategoryHelper categoryHelper)
+        public ShipperController(IShipperHelper shipperHelper)
         {
-            _categoryHelper = categoryHelper;
+            _shipperHelper = shipperHelper;
         }
 
-        // GET: CategoryController
         public ActionResult Index()
         {
-            var result = _categoryHelper.GetCategories();   
+            var result = _shipperHelper.GetShippers();
             return View(result);
         }
 
-        // GET: CategoryController/Details/5
         public ActionResult Details(int id)
         {
-            var result = _categoryHelper.GetCategory(id);
+            var result = _shipperHelper.GetShipper(id);
             return View(result);
         }
 
-        // GET: CategoryController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: CategoryController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CategoryViewModel category)
+        public ActionResult Create(ShipperViewModel shipper)
         {
             try
             {
-                _categoryHelper.Add(category);
+                _shipperHelper.Add(shipper);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -51,13 +46,11 @@ namespace FrontEnd.Controllers
             }
         }
 
-        // GET: CategoryController/Edit/5
         public ActionResult Edit(int id)
         {
             return View();
         }
 
-        // POST: CategoryController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, IFormCollection collection)
@@ -72,13 +65,11 @@ namespace FrontEnd.Controllers
             }
         }
 
-        // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)

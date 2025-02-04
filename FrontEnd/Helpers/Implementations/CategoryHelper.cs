@@ -1,6 +1,7 @@
 ﻿using FrontEnd.ApiModels;
 using FrontEnd.Helpers.Interfaces;
 using FrontEnd.Models;
+using Newtonsoft.Json;
 
 namespace FrontEnd.Helpers.Implementations
 {
@@ -53,7 +54,7 @@ namespace FrontEnd.Helpers.Implementations
             foreach (var category in categories)
             {
                 lista.Add(Convertir(category));
-            }
+            }   
             return lista;
         }
 

@@ -36,13 +36,13 @@ namespace BackEnd.Controllers
         [HttpPost]
         public void Post([FromBody] CategoryDTO category)
         {
-            _categoryService.AddCategory(category);
+            _categoryService.AddCategory(category); 
 
         }
 
         // PUT api/<CategoryController>/5
         [HttpPut]
-        public void Put([FromBody] CategoryDTO category)
+        public void Put( [FromBody] CategoryDTO category)
         {
             _categoryService.UpdateCategory(category);
 

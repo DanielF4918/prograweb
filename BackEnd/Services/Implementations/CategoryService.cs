@@ -12,10 +12,10 @@ namespace BackEnd.Services.Implementations
 
         public CategoryService(IUnidadDeTrabajo unidadDeTrabajo)
         {
-            _unidadDeTrabajo = unidadDeTrabajo;
+            _unidadDeTrabajo= unidadDeTrabajo;
         }
 
-        Category Convertir(CategoryDTO category)
+        Category Convertir (CategoryDTO category)
         {
             return new Category
             {
@@ -43,7 +43,7 @@ namespace BackEnd.Services.Implementations
 
         public void DeleteCategory(int id)
         {
-            var category = new Category { CategoryId = id };
+            var category = new Category { CategoryId=id };
             _unidadDeTrabajo.CategoryDAL.Remove(category);
             _unidadDeTrabajo.Complete();
         }

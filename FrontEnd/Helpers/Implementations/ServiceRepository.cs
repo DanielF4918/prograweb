@@ -12,9 +12,9 @@ namespace FrontEnd.Helpers.Implementations
         {
             Client = _client;
             string baseUrl = configuration.GetValue<string>("BackEnd:Url") ?? "";
-
+            
             Client.BaseAddress = new Uri(baseUrl);
-
+           
 
         }
         public HttpResponseMessage GetResponse(string url)
