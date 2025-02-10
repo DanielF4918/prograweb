@@ -1,6 +1,8 @@
 ﻿using DAL.Interfaces;
 using Entities.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAL.Implementations
 {

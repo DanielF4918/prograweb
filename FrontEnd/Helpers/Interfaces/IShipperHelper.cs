@@ -1,4 +1,6 @@
 ﻿using FrontEnd.Models;
+using System.Collections.Generic;
+
 namespace FrontEnd.Helpers.Interfaces
 {
     public interface IShipperHelper

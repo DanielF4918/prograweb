@@ -1,87 +1,87 @@
 ﻿using FrontEnd.Helpers.Interfaces;
 using FrontEnd.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace FrontEnd.Controllers
 {
     public class ShipperController : Controller
     {
-        IShipperHelper _shipperHelper;
+        private readonly IShipperHelper _shipperHelper;
 
         public ShipperController(IShipperHelper shipperHelper)
         {
             _shipperHelper = shipperHelper;
         }
 
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            var result = _shipperHelper.GetShippers();
-            return View(result);
+            var shippers = _shipperHelper.GetShippers();
+            return View(shippers);
         }
 
-        public ActionResult Details(int id)
+        public IActionResult Details(int id)
         {
-            var result = _shipperHelper.GetShipper(id);
-            return View(result);
+            var shipper = _shipperHelper.GetShipper(id);
+            if (shipper == null)
+            {
+                return NotFound();
+            }
+            return View(shipper);
         }
 
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(ShipperViewModel shipper)
+        public IActionResult Create(ShipperViewModel shipper)
         {
-            try
+            if (ModelState.IsValid)
             {
                 _shipperHelper.Add(shipper);
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(shipper);
         }
 
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id)
         {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            var shipper = _shipperHelper.GetShipper(id);
+            if (shipper == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound();
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        public ActionResult Delete(int id)
-        {
-            return View();
+            return View(shipper);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Edit(ShipperViewModel shipper)
         {
-            try
+            if (ModelState.IsValid)
             {
+                _shipperHelper.Update(shipper);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            return View(shipper);
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var shipper = _shipperHelper.GetShipper(id);
+            if (shipper == null)
             {
-                return View();
+                return NotFound();
             }
+            return View(shipper);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            _shipperHelper.Delete(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
