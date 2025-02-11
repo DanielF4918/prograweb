@@ -1,32 +1,46 @@
-﻿@model List<FrontEnd.Models.ShipperViewModel>
+﻿@model IEnumerable<FrontEnd.Models.ShipperViewModel>
 
 @{
-    ViewData["Title"] = "Shippers";
+    ViewData["Title"] = "Index";
 }
 
-<h2>Shippers</h2>
-<a asp-action="Create" class="btn btn-primary">Create New</a>
+<h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Company Name</th>
-            <th>Phone</th>
-            <th>Actions</th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShipperId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CompanyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.ShipperId</td>
-                <td>@item.CompanyName</td>
-                <td>@item.Phone</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.ShipperId" class="btn btn-warning">Edit</a>
-                    <a asp-action="Details" asp-route-id="@item.ShipperId" class="btn btn-info">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.ShipperId" class="btn btn-danger">Delete</a>
+                    @Html.DisplayFor(modelItem => item.ShipperId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CompanyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ShipperId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ShipperId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ShipperId })
                 </td>
             </tr>
         }

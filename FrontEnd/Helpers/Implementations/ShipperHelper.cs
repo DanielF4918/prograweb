@@ -3,19 +3,17 @@ using FrontEnd.Helpers.Interfaces;
 using FrontEnd.Models;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 
 namespace FrontEnd.Helpers.Implementations
 {
     public class ShipperHelper : IShipperHelper
     {
-        private readonly IServiceRepository _ServiceRepository;
+        private readonly IServiceRepository _serviceRepository;
 
         public ShipperHelper(IServiceRepository serviceRepository)
         {
-            _ServiceRepository = serviceRepository;
+            _serviceRepository = serviceRepository;
         }
 
         private ShipperViewModel Convertir(ShipperAPI shipper)
@@ -28,38 +26,54 @@ namespace FrontEnd.Helpers.Implementations
             };
         }
 
-        public ShipperViewModel Add(ShipperViewModel shipper)
+        public List<ShipperViewModel> GetAll()
         {
-            HttpResponseMessage response = _ServiceRepository.PostResponse("api/Shipper", shipper);
-            return shipper;
+            HttpResponseMessage response = _serviceRepository.GetResponse("api/Shippers");
+            List<ShipperAPI> shippers = new List<ShipperAPI>();
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                shippers = JsonConvert.DeserializeObject<List<ShipperAPI>>(content);
+            }
+
+            List<ShipperViewModel> lista = new List<ShipperViewModel>();
+            foreach (var shipper in shippers)
+            {
+                lista.Add(Convertir(shipper));
+            }
+            return lista;
+        }
+
+        public ShipperViewModel GetById(int id)
+        {
+            HttpResponseMessage response = _serviceRepository.GetResponse("api/Shippers/" + id);
+            ShipperAPI shipper = new ShipperAPI();
+            if (response != null && response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+                shipper = JsonConvert.DeserializeObject<ShipperAPI>(content);
+            }
+            return Convertir(shipper);
+        }
+
+        public ShipperViewModel Create(ShipperViewModel model)
+        {
+            HttpResponseMessage response = _serviceRepository.PostResponse("api/Shippers", model);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+            }
+            return model;
+        }
+
+        public void Update(ShipperViewModel model)
+        {
+            _serviceRepository.PutResponse("api/Shippers", model);
         }
 
         public void Delete(int id)
         {
-            _ServiceRepository.DeleteResponse("api/Shipper/" + id);
-        }
-
-        public List<ShipperViewModel> GetShippers()
-        {
-            HttpResponseMessage responseMessage = _ServiceRepository.GetResponse("api/Shipper");
-            var content = responseMessage.Content.ReadAsStringAsync().Result;
-            List<ShipperAPI> shippers = JsonConvert.DeserializeObject<List<ShipperAPI>>(content) ?? new List<ShipperAPI>();
-
-            return shippers.Select(Convertir).ToList();
-        }
-
-        public ShipperViewModel GetShipper(int? id)
-        {
-            HttpResponseMessage responseMessage = _ServiceRepository.GetResponse("api/Shipper/" + id);
-            var content = responseMessage.Content.ReadAsStringAsync().Result;
-            ShipperAPI shipper = JsonConvert.DeserializeObject<ShipperAPI>(content);
-            return Convertir(shipper);
-        }
-
-        public ShipperViewModel Update(ShipperViewModel shipper)
-        {
-            HttpResponseMessage response = _ServiceRepository.PutResponse("api/Shipper", shipper);
-            return shipper;
+            _serviceRepository.DeleteResponse("api/Shippers/" + id);
         }
     }
 }

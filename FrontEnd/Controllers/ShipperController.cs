@@ -16,13 +16,13 @@ namespace FrontEnd.Controllers
 
         public IActionResult Index()
         {
-            var shippers = _shipperHelper.GetShippers();
+            var shippers = _shipperHelper.GetAll();
             return View(shippers);
         }
 
         public IActionResult Details(int id)
         {
-            var shipper = _shipperHelper.GetShipper(id);
+            var shipper = _shipperHelper.GetById(id);
             if (shipper == null)
             {
                 return NotFound();
@@ -36,19 +36,19 @@ namespace FrontEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ShipperViewModel shipper)
+        public IActionResult Create(ShipperViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _shipperHelper.Add(shipper);
-                return RedirectToAction(nameof(Index));
+                _shipperHelper.Create(model);
+                return RedirectToAction("Index");
             }
-            return View(shipper);
+            return View(model);
         }
 
         public IActionResult Edit(int id)
         {
-            var shipper = _shipperHelper.GetShipper(id);
+            var shipper = _shipperHelper.GetById(id);
             if (shipper == null)
             {
                 return NotFound();
@@ -57,19 +57,19 @@ namespace FrontEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(ShipperViewModel shipper)
+        public IActionResult Edit(ShipperViewModel model)
         {
             if (ModelState.IsValid)
             {
-                _shipperHelper.Update(shipper);
-                return RedirectToAction(nameof(Index));
+                _shipperHelper.Update(model);
+                return RedirectToAction("Index");
             }
-            return View(shipper);
+            return View(model);
         }
 
         public IActionResult Delete(int id)
         {
-            var shipper = _shipperHelper.GetShipper(id);
+            var shipper = _shipperHelper.GetById(id);
             if (shipper == null)
             {
                 return NotFound();
@@ -81,7 +81,7 @@ namespace FrontEnd.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             _shipperHelper.Delete(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
     }
 }

@@ -1,15 +1,10 @@
 ﻿using Entities.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IShipperDAL
+    public interface IShipperDAL : IDALGenerico<Shipper>
     {
-        Task<List<Shipper>> GetAllAsync();
-        Task<Shipper?> GetByIdAsync(int id);
-        Task AddAsync(Shipper shipper);
-        Task UpdateAsync(Shipper shipper);
-        Task DeleteAsync(int id);
+        List<Shipper> GetAllShippers();
     }
 }

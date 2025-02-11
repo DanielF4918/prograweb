@@ -2,7 +2,7 @@
 using DAL.Interfaces;
 using Entities.Entities;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace BackEnd.Services.Implementations
 {
@@ -15,29 +15,34 @@ namespace BackEnd.Services.Implementations
             _shipperDAL = shipperDAL;
         }
 
-        public async Task<List<Shipper>> GetAllAsync()
+        public IEnumerable<Shipper> GetAll()
         {
-            return await _shipperDAL.GetAllAsync();
+            return _shipperDAL.GetAll();  // Asegúrate de tener un método válido en el DAL
         }
 
-        public async Task<Shipper?> GetByIdAsync(int id)
+        public Shipper GetById(int id)
         {
-            return await _shipperDAL.GetByIdAsync(id);
+            // Si no existe GetById en el DAL, busca en la lista obtenida por GetAll()
+            return _shipperDAL.GetAll().FirstOrDefault(s => s.ShipperId == id);
         }
 
-        public async Task AddAsync(Shipper shipper)
+        public void Create(Shipper shipper)
         {
-            await _shipperDAL.AddAsync(shipper);
+            _shipperDAL.Add(shipper);
         }
 
-        public async Task UpdateAsync(Shipper shipper)
+        public void Update(Shipper shipper)
         {
-            await _shipperDAL.UpdateAsync(shipper);
+            _shipperDAL.Update(shipper);
         }
 
-        public async Task DeleteAsync(int id)
+        public void Delete(int id)
         {
-            await _shipperDAL.DeleteAsync(id);
+            var shipper = _shipperDAL.Get(id);
+            if (shipper != null)
+            {
+                _shipperDAL.Delete(shipper);
+            }
         }
     }
 }
