@@ -7,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddHttpClient<IServiceRepository, ServiceRepository>();
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();     
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+builder.Services.AddScoped<ICategoryHelper, CategoryHelper>();
+builder.Services.AddScoped<IProductHelper, ProductHelper>();
+builder.Services.AddScoped<ISupplierHelper, SupplierHelper>();
 builder.Services.AddScoped<ICategoryHelper, CategoryHelper>();           
 builder.Services.AddScoped<IShipperHelper, ShipperHelper>();             
 

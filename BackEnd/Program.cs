@@ -23,12 +23,12 @@ builder.Host.UseSerilog((ctx, lc) => lc
 #region DI
 builder.Services.AddDbContext<NorthwndContext>();
 builder.Services.AddScoped<IUnidadDeTrabajo, UnidadDeTrabajo>();
-
-// Registro de servicios y DAL para Category
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICategoryDAL, CategoryDAL>();
-
-// Registro de servicios y DAL para Shipper
+builder.Services.AddScoped<ISupplierDAL, SupplierDAL>();
+builder.Services.AddScoped<IProductDAL, ProductDAL>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IShipperService, ShipperService>();
 builder.Services.AddScoped<IShipperDAL, ShipperDAL>();
 
