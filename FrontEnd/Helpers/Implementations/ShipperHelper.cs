@@ -2,53 +2,40 @@
 using FrontEnd.Helpers.Interfaces;
 using FrontEnd.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net.Http;
 
 namespace FrontEnd.Helpers.Implementations
 {
     public class ShipperHelper : IShipperHelper
     {
-        IServiceRepository _ServiceRepository;
+        private readonly IServiceRepository _serviceRepository;
 
-        ShipperViewModel Convertir(ShipperAPI shipper)
+        public ShipperHelper(IServiceRepository serviceRepository)
         {
-            ShipperViewModel shipperViewModel = new ShipperViewModel
+            _serviceRepository = serviceRepository;
+        }
+
+        private ShipperViewModel Convertir(ShipperAPI shipper)
+        {
+            return new ShipperViewModel
             {
                 ShipperId = shipper.ShipperId,
                 CompanyName = shipper.CompanyName,
                 Phone = shipper.Phone
             };
-            return shipperViewModel;
         }
 
-        public ShipperHelper(IServiceRepository serviceRepository)
+        public List<ShipperViewModel> GetAll()
         {
-            _ServiceRepository = serviceRepository;
-        }
-
-        public ShipperViewModel Add(ShipperViewModel shipper)
-        {
-            HttpResponseMessage response = _ServiceRepository.PostResponse("api/Shipper", shipper);
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage response = _serviceRepository.GetResponse("api/Shippers");
+            List<ShipperAPI> shippers = new List<ShipperAPI>();
+            if (response != null && response.IsSuccessStatusCode)
             {
                 var content = response.Content.ReadAsStringAsync().Result;
-            }
-            return shipper;
-        }
-
-        public void Delete(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ShipperViewModel> GetShippers()
-        {
-            HttpResponseMessage responseMessage = _ServiceRepository.GetResponse("api/Shipper");
-            List<ShipperAPI> shippers = new List<ShipperAPI>();
-            if (responseMessage != null)
-            {
-                var content = responseMessage.Content.ReadAsStringAsync().Result;
                 shippers = JsonConvert.DeserializeObject<List<ShipperAPI>>(content);
             }
+
             List<ShipperViewModel> lista = new List<ShipperViewModel>();
             foreach (var shipper in shippers)
             {
@@ -57,21 +44,36 @@ namespace FrontEnd.Helpers.Implementations
             return lista;
         }
 
-        public ShipperViewModel GetShipper(int? id)
+        public ShipperViewModel GetById(int id)
         {
-            HttpResponseMessage responseMessage = _ServiceRepository.GetResponse("api/Shipper/" + id.ToString());
+            HttpResponseMessage response = _serviceRepository.GetResponse("api/Shippers/" + id);
             ShipperAPI shipper = new ShipperAPI();
-            if (responseMessage != null)
+            if (response != null && response.IsSuccessStatusCode)
             {
-                var content = responseMessage.Content.ReadAsStringAsync().Result;
+                var content = response.Content.ReadAsStringAsync().Result;
                 shipper = JsonConvert.DeserializeObject<ShipperAPI>(content);
             }
             return Convertir(shipper);
         }
 
-        public ShipperViewModel Update(ShipperViewModel shipper)
+        public ShipperViewModel Create(ShipperViewModel model)
         {
-            throw new NotImplementedException();
+            HttpResponseMessage response = _serviceRepository.PostResponse("api/Shippers", model);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+            }
+            return model;
+        }
+
+        public void Update(ShipperViewModel model)
+        {
+            _serviceRepository.PutResponse("api/Shippers", model);
+        }
+
+        public void Delete(int id)
+        {
+            _serviceRepository.DeleteResponse("api/Shippers/" + id);
         }
     }
 }

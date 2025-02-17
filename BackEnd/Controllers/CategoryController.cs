@@ -13,15 +13,19 @@ namespace BackEnd.Controllers
     {
         ICategoryService _categoryService;
 
-        public CategoryController(ICategoryService categoryService)
+        ILogger<CategoryController> _logger;
+
+        public CategoryController(ICategoryService categoryService, ILogger<CategoryController> logger)
         {
             _categoryService = categoryService;
+            _logger = logger;
         }
 
         // GET: api/<CategoryController>
         [HttpGet]
         public IEnumerable<CategoryDTO> Get()
         {
+            _logger.LogDebug("Obtener todas las categorías");
             return _categoryService.GetCategories();
         }
 
@@ -36,15 +40,24 @@ namespace BackEnd.Controllers
         [HttpPost]
         public void Post([FromBody] CategoryDTO category)
         {
-            _categoryService.AddCategory(category); 
+            _categoryService.AddCategory(category);
 
         }
 
         // PUT api/<CategoryController>/5
         [HttpPut]
-        public void Put( [FromBody] CategoryDTO category)
+        public void Put([FromBody] CategoryDTO category)
         {
-            _categoryService.UpdateCategory(category);
+            try
+            {
+                _categoryService.UpdateCategory(category);
+            }
+            catch (Exception e)
+            {
+
+                _logger.LogError(e.Message);
+            }
+
 
         }
 

@@ -1,13 +1,14 @@
 ﻿using Entities.Entities;
+using System.Collections.Generic;
 
 namespace BackEnd.Services.Interfaces
 {
     public interface IShipperService
     {
-        Task<List<Shipper>> GetAllAsync();
-        Task<Shipper?> GetByIdAsync(int id);
-        Task AddAsync(Shipper shipper);
-        Task UpdateAsync(Shipper shipper);
-        Task DeleteAsync(int id);
+        IEnumerable<Shipper> GetAll();
+        Shipper GetById(int id);
+        void Create(Shipper shipper);
+        void Update(Shipper shipper);
+        void Delete(int id);
     }
 }

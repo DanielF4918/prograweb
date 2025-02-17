@@ -10,6 +10,6 @@ namespace FrontEnd.Helpers.Interfaces
         HttpResponseMessage PutResponse(string url, object model);
         HttpResponseMessage PostResponse(string url, object model);
         HttpResponseMessage DeleteResponse(string url);
-        Task<HttpResponseMessage> GetResponseAsync(string v);
+        //Task<HttpResponseMessage> GetResponseAsync(string v);
     }
 }

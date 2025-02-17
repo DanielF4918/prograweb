@@ -1,6 +1,7 @@
 ﻿using BackEnd.Services.Interfaces;
 using Entities.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace BackEnd.Controllers
 {
@@ -16,40 +17,40 @@ namespace BackEnd.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IEnumerable<Shipper> Get()
         {
-            var shippers = await _shipperService.GetAllAsync();
-            return Ok(shippers);
+            return _shipperService.GetAll();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public ActionResult<Shipper> Get(int id)
         {
-            var shipper = await _shipperService.GetByIdAsync(id);
-            if (shipper == null) return NotFound();
-            return Ok(shipper);
+            var shipper = _shipperService.GetById(id);
+            if (shipper == null)
+            {
+                return NotFound();
+            }
+            return shipper;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Shipper shipper)
+        public IActionResult Post([FromBody] Shipper shipper)
         {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            await _shipperService.AddAsync(shipper);
-            return CreatedAtAction(nameof(GetById), new { id = shipper.ShipperId }, shipper);
+            _shipperService.Create(shipper);
+            return CreatedAtAction(nameof(Get), new { id = shipper.ShipperId }, shipper);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Shipper shipper)
+        [HttpPut]
+        public IActionResult Put([FromBody] Shipper shipper)
         {
-            if (id != shipper.ShipperId) return BadRequest();
-            await _shipperService.UpdateAsync(shipper);
+            _shipperService.Update(shipper);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int id)
         {
-            await _shipperService.DeleteAsync(id);
+            _shipperService.Delete(id);
             return NoContent();
         }
     }

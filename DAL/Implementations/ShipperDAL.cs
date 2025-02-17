@@ -1,47 +1,57 @@
 ﻿using DAL.Interfaces;
 using Entities.Entities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DAL.Implementations
 {
-    public class ShipperDAL : IShipperDAL
+    public class ShipperDAL : DALGenericoImpl<Shipper>, IShipperDAL
     {
         private readonly NorthwndContext _context;
 
-        public ShipperDAL(NorthwndContext context)
+        public ShipperDAL(NorthwndContext context) : base(context)
         {
             _context = context;
         }
 
-        public async Task<List<Shipper>> GetAllAsync()
+        public List<Shipper> GetAllShippers()
         {
-            return await _context.Shippers.ToListAsync();
+            string query = "sp_GetAllShippers";
+            var result = _context.Shippers.FromSqlRaw(query);
+            return result.ToList();
         }
 
-        public async Task<Shipper?> GetByIdAsync(int id)
+        public bool Add(Shipper entity)
         {
-            return await _context.Shippers.FindAsync(id);
-        }
-
-        public async Task AddAsync(Shipper shipper)
-        {
-            await _context.Shippers.AddAsync(shipper);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateAsync(Shipper shipper)
-        {
-            _context.Shippers.Update(shipper);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteAsync(int id)
-        {
-            var shipper = await _context.Shippers.FindAsync(id);
-            if (shipper != null)
+            try
             {
-                _context.Shippers.Remove(shipper);
-                await _context.SaveChangesAsync();
+                string sql = "exec [dbo].[sp_AddShipper] @CompanyName, @Phone";
+
+                var parameters = new SqlParameter[]
+                {
+                    new SqlParameter
+                    {
+                        ParameterName = "@CompanyName",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = entity.CompanyName
+                    },
+                    new SqlParameter
+                    {
+                        ParameterName = "@Phone",
+                        SqlDbType = System.Data.SqlDbType.VarChar,
+                        Value = (object)entity.Phone ?? DBNull.Value
+                    }
+                };
+
+                _context.Database.ExecuteSqlRaw(sql, parameters);
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
             }
         }
     }

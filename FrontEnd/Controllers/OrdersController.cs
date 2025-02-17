@@ -5,29 +5,29 @@ using System.Collections.Generic;
 
 namespace FrontEnd.Controllers
 {
-    public class ShipperController : Controller
+    public class OrdersController : Controller
     {
-        private readonly IShipperHelper _shipperHelper;
+        private readonly IOrdersHelper _ordersHelper;
 
-        public ShipperController(IShipperHelper shipperHelper)
+        public OrdersController(IOrdersHelper ordersHelper)
         {
-            _shipperHelper = shipperHelper;
+            _ordersHelper = ordersHelper;
         }
 
         public IActionResult Index()
         {
-            var shippers = _shipperHelper.GetAll();
-            return View(shippers);
+            var orders = _ordersHelper.GetAllOrders();
+            return View(orders);
         }
 
         public IActionResult Details(int id)
         {
-            var shipper = _shipperHelper.GetById(id);
-            if (shipper == null)
+            var order = _ordersHelper.GetOrder(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(shipper);
+            return View(order);
         }
 
         public IActionResult Create()
@@ -36,51 +36,51 @@ namespace FrontEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(ShipperViewModel model)
+        public IActionResult Create(OrderViewModel order)
         {
             if (ModelState.IsValid)
             {
-                _shipperHelper.Create(model);
+                _ordersHelper.Add(order);
                 return RedirectToAction("Index");
             }
-            return View(model);
+            return View(order);
         }
 
         public IActionResult Edit(int id)
         {
-            var shipper = _shipperHelper.GetById(id);
-            if (shipper == null)
+            var order = _ordersHelper.GetOrder(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(shipper);
+            return View(order);
         }
 
         [HttpPost]
-        public IActionResult Edit(ShipperViewModel model)
+        public IActionResult Edit(OrderViewModel order)
         {
             if (ModelState.IsValid)
             {
-                _shipperHelper.Update(model);
+                _ordersHelper.Update(order);
                 return RedirectToAction("Index");
             }
-            return View(model);
+            return View(order);
         }
 
         public IActionResult Delete(int id)
         {
-            var shipper = _shipperHelper.GetById(id);
-            if (shipper == null)
+            var order = _ordersHelper.GetOrder(id);
+            if (order == null)
             {
                 return NotFound();
             }
-            return View(shipper);
+            return View(order);
         }
 
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
-            _shipperHelper.Delete(id);
+            _ordersHelper.Delete(id);
             return RedirectToAction("Index");
         }
     }
