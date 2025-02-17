@@ -12,7 +12,9 @@ builder.Services.AddScoped<ICategoryHelper, CategoryHelper>();
 builder.Services.AddScoped<IProductHelper, ProductHelper>();
 builder.Services.AddScoped<ISupplierHelper, SupplierHelper>();
 builder.Services.AddScoped<ICategoryHelper, CategoryHelper>();           
-builder.Services.AddScoped<IShipperHelper, ShipperHelper>();             
+builder.Services.AddScoped<IShipperHelper, ShipperHelper>();
+builder.Services.AddScoped<IOrdersHelper, OrdersHelper>();
+
 
 var app = builder.Build();
 
