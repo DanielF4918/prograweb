@@ -1,13 +1,11 @@
 ﻿using BackEnd.DTO;
 using BackEnd.Services.Interfaces;
-using DAL.Implementations;
 using DAL.Interfaces;
 using Entities.Entities;
 
 namespace BackEnd.Services.Implementations
 {
     public class ProductService : IProductService
-
     {
         IUnidadDeTrabajo _Unidad;
         public ProductService(IUnidadDeTrabajo unidadDeTrabajo)
@@ -17,13 +15,16 @@ namespace BackEnd.Services.Implementations
 
         ProductDTO Convertir(Product product)
         {
+            var supplier = _Unidad.SupplierDAL.Get((int)product.SupplierId);
+
             return new ProductDTO
             {
                 ProductId = product.ProductId,
                 ProductName = product.ProductName,
                 SupplierId = product.SupplierId,
                 CategoryId = product.CategoryId,
-                Discontinued = product.Discontinued
+                Discontinued = product.Discontinued,
+                SupplierName = supplier.CompanyName
             };
         }
 
@@ -39,38 +40,27 @@ namespace BackEnd.Services.Implementations
             };
         }
 
-
-
         public ProductDTO Add(ProductDTO product)
         {
             try
             {
                 _Unidad.ProductDAL.Add(Convertir(product));
-
                 _Unidad.Complete();
                 return product;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
 
         public void Delete(int id)
         {
-            try
+            Product product = _Unidad.ProductDAL.Get(id);
+            if (product != null)
             {
-                Product product = _Unidad.ProductDAL.Get(id);
-                if (product != null)
-                {
-                    _Unidad.ProductDAL.Delete(product);
-                    _Unidad.Complete();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                _Unidad.ProductDAL.Delete(product);
+                _Unidad.Complete();
             }
         }
 
@@ -86,7 +76,6 @@ namespace BackEnd.Services.Implementations
             List<ProductDTO> productsList = new List<ProductDTO>();
             foreach (var product in products)
             {
-
                 productsList.Add(Convertir(product));
             }
             return productsList;
@@ -97,16 +86,13 @@ namespace BackEnd.Services.Implementations
             try
             {
                 _Unidad.ProductDAL.Update(Convertir(product));
-
                 _Unidad.Complete();
                 return product;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
-
     }
 }

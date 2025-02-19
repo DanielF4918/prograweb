@@ -27,7 +27,12 @@ namespace FrontEnd.Controllers
         // GET: ProductController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            ProductViewModel product = _productHelper.GetById(id);
+            product.CategoryName = _categoryHelper
+                                    .GetCategory(product.CategoryId)
+                                    .CategoryName;
+
+            return View(product);
         }
 
         // GET: ProductController/Create
@@ -58,17 +63,22 @@ namespace FrontEnd.Controllers
         // GET: ProductController/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            ProductViewModel product = _productHelper.GetById(id);
+            product.Suppliers = _supplierHelper.GetAll();
+            product.Categories = _categoryHelper.GetCategories();
+            return View(product);
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(ProductViewModel product)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+
+                _productHelper.EdiProduct(product);
+                return RedirectToAction("Details", new { id = product.ProductId });
             }
             catch
             {
@@ -79,16 +89,22 @@ namespace FrontEnd.Controllers
         // GET: ProductController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            ProductViewModel product = _productHelper.GetById(id);
+            product.CategoryName = _categoryHelper
+                                    .GetCategory(product.CategoryId)
+                                    .CategoryName;
+
+            return View(product);
         }
 
         // POST: ProductController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(ProductViewModel product)
         {
             try
             {
+                _productHelper.DeleteProduct(product.ProductId);
                 return RedirectToAction(nameof(Index));
             }
             catch

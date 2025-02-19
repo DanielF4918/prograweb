@@ -22,7 +22,8 @@ namespace FrontEnd.Helpers.Implementations
                 ProductName = product.ProductName,
                 SupplierId = product.SupplierId,
                 CategoryId = (int)product.CategoryId,
-                Discontinued = product.Discontinued
+                Discontinued = product.Discontinued,
+                SupplierName = product.SupplierName
             };
         }
 
@@ -55,7 +56,7 @@ namespace FrontEnd.Helpers.Implementations
 
         public void DeleteProduct(int id)
         {
-            HttpResponseMessage responseMessage = _repository.DeleteResponse("api/product" + id.ToString());
+            HttpResponseMessage responseMessage = _repository.DeleteResponse("api/product/" + id.ToString());
             if (responseMessage != null)
             {
                 var content = responseMessage.Content;
