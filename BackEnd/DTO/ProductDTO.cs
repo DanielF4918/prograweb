@@ -10,6 +10,7 @@ namespace BackEnd.DTO
         public string ProductName { get; set; } = null!;
         [Required]
         public int? SupplierId { get; set; }
+        public string? SupplierName { get; set; }
         [Required]
         public int? CategoryId { get; set; }
 
